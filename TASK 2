@@ -1,0 +1,58 @@
+from PIL import Image
+import numpy as np
+
+def encrypt_image(input_image_path: str, output_image_path: str) -> None:
+    # Open the image
+    image = Image.open(input_image_path)
+    # Convert image to numpy array
+    pixels = np.array(image)
+
+    # Perform pixel manipulation (swapping pixel values)
+    encrypted_pixels = pixels.copy()
+    height, width, channels = pixels.shape
+
+    for i in range(height):
+        for j in range(width):
+            # Swap pixel values with the next pixel (circularly)
+            if j < width - 1:
+                encrypted_pixels[i, j], encrypted_pixels[i, j + 1] = pixels[i, j + 1], pixels[i, j]
+
+    # Save the encrypted image
+    encrypted_image = Image.fromarray(encrypted_pixels)
+    encrypted_image.save(output_image_path)
+    print(f"Encrypted image saved as: {output_image_path}")
+
+def decrypt_image(input_image_path: str, output_image_path: str) -> None:
+    # Open the encrypted image
+    image = Image.open(input_image_path)
+    # Convert image to numpy array
+    pixels = np.array(image)
+
+    # Perform pixel manipulation (swapping back pixel values)
+    decrypted_pixels = pixels.copy()
+    height, width, channels = pixels.shape
+
+    for i in range(height):
+        for j in range(width):
+            # Swap pixel values back to original
+            if j < width - 1:
+                decrypted_pixels[i, j + 1], decrypted_pixels[i, j] = pixels[i, j], pixels[i, j + 1]
+
+    # Save the decrypted image
+    decrypted_image = Image.fromarray(decrypted_pixels)
+    decrypted_image.save(output_image_path)
+    print(f"Decrypted image saved as: {output_image_path}")
+
+def main():
+    input_image_path = input("Enter the path of the image to encrypt: ")
+    encrypted_image_path = "encrypted_image.png"
+    decrypted_image_path = "decrypted_image.png"
+
+    # Encrypt the image
+    encrypt_image(input_image_path, encrypted_image_path)
+
+    # Decrypt the image
+    decrypt_image(encrypted_image_path, decrypted_image_path)
+
+if __name__ == "__main__":
+    main()
