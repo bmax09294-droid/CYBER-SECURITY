@@ -1,0 +1,40 @@
+def encrypt(message: str, shift: int) -> str:
+    encrypted_message = ""
+    
+    for char in message:
+        if char.isalpha():  # Check if the character is an alphabet
+            shift_base = ord('A') if char.isupper() else ord('a')
+            # Encrypt the character and wrap around using modulo
+            encrypted_char = chr((ord(char) - shift_base + shift) % 26 + shift_base)
+            encrypted_message += encrypted_char
+        else:
+            encrypted_message += char  # Non-alphabetic characters remain unchanged
+    
+    return encrypted_message
+
+def decrypt(encrypted_message: str, shift: int) -> str:
+    decrypted_message = ""
+    
+    for char in encrypted_message:
+        if char.isalpha():  # Check if the character is an alphabet
+            shift_base = ord('A') if char.isupper() else ord('a')
+            # Decrypt the character and wrap around using modulo
+            decrypted_char = chr((ord(char) - shift_base - shift) % 26 + shift_base)
+            decrypted_message += decrypted_char
+        else:
+            decrypted_message += char  # Non-alphabetic characters remain unchanged
+    
+    return decrypted_message
+
+def main():
+    message = input("Enter your message: ")
+    shift = int(input("Enter shift value: "))
+    
+    encrypted_message = encrypt(message, shift)
+    print("Encrypted message:", encrypted_message)
+    
+    decrypted_message = decrypt(encrypted_message, shift)
+    print("Decrypted message:", decrypted_message)
+
+if __name__ == "__main__":
+    main()
