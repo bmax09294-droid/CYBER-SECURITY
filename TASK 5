@@ -1,0 +1,29 @@
+from scapy.all import sniff, IP, TCP, UDP, Raw
+
+def packet_callback(packet):
+    # Check if the packet has an IP layer
+    if IP in packet:
+        ip_src = packet[IP].src
+        ip_dst = packet[IP].dst
+        protocol = packet[IP].proto
+
+        # Print basic packet information
+        print(f"Source IP: {ip_src}, Destination IP: {ip_dst}, Protocol: {protocol}")
+
+        # Check for TCP or UDP payload
+        if packet.haslayer(TCP):
+            print("Protocol: TCP")
+            if Raw in packet:
+                print(f"Payload: {packet[Raw].load}")
+        elif packet.haslayer(UDP):
+            print("Protocol: UDP")
+            if Raw in packet:
+                print(f"Payload: {packet[Raw].load}")
+
+def main():
+    print("Starting packet sniffer...")
+    # Start sniffing packets
+    sniff(prn=packet_callback, store=0)
+
+if __name__ == "__main__":
+    main()
